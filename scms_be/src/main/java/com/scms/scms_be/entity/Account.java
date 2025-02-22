@@ -14,36 +14,32 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "ourusers")
+@Table(name = "account")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Users implements UserDetails {
+public class Account implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long accountId;
+
+    private String employeeId;
+    private String username;
     private String email;
-    private String name;
     private String password;
-    private String city;
     private String role;
-
-    private String company;
-    private String location;
-
     private String otp;
+    private String status;
     private boolean verified = false;
 
-    public Users(String email, String name, String password, String city, String role,String company, String location, String otp, boolean verified) {
+    public Account(String email, String username, String password, String role, String otp,String status, boolean verified) {
         this.email = email;
-        this.name = name;
+        this.username = username;
         this.password = password;
-        this.city = city;
         this.role = role;
-        this.company = company;
-        this.location = location;
         this.otp = otp;
+        this.status = status;
         this.verified = verified;
     }
 

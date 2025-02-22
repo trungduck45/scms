@@ -5,11 +5,11 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.scms.scms_be.entity.Users;
+import com.scms.scms_be.entity.Account;
 
 @Repository
-public interface UsersRepository extends JpaRepository<Users, Integer>{
+public interface UsersRepository extends JpaRepository<Account, Integer>{
 
-    Optional<Users> findByEmail(String email);
-    Optional<Users> findByEmailAndOtp(String email, String otp);
+    Optional<Account> findByEmail(String email);
+    Optional<Account> findByEmailAndOtp(String email, String otp);
 }

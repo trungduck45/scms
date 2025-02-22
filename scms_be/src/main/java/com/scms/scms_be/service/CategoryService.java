@@ -1,4 +1,4 @@
-package com.scms.scms_be.service.category;
+package com.scms.scms_be.service;
 
 import java.util.List;
 import java.util.Optional;

@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.scms.scms_be.config.JWTUntils;
 import com.scms.scms_be.dto.UserDto;
-import com.scms.scms_be.entity.Users;
+import com.scms.scms_be.entity.Account;
 import com.scms.scms_be.repository.UsersRepository;
-import com.scms.scms_be.service.email.EmailService;
+import com.scms.scms_be.service.EmailService;
 
 @Service
 public class UserService {
@@ -49,24 +49,22 @@ public class UserService {
             String otp = String.format("%06d", new Random().nextInt(999999));
 
             // Create User
-            Users newUser = new Users(
+            Account newUser = new Account(
                     registrationRequest.getEmail(),
-                    registrationRequest.getName(),
+                    registrationRequest.getUsername(),
                     passwordEncoder.encode(registrationRequest.getPassword()),
-                    registrationRequest.getCity(),
                     registrationRequest.getRole(),
-                    registrationRequest.getCompany(),
-                    registrationRequest.getLocation(),
                     otp,
+                    "Active",
                     false // Not verified yet
             );
 
-            Users savedUser = usersRepo.save(newUser);
+            Account savedUser = usersRepo.save(newUser);
 
             // Send OTP via Email
             emailService.sendOTPtoEmail(registrationRequest.getEmail(), otp);
 
-            if (savedUser.getId() > 0) {
+            if (savedUser.getAccountId() > 0) {
                 resp.setOurUsers(savedUser);
                 resp.setStatusCode(200);
                 resp.setMessage("Đăng ký thành công! Vui lòng kiểm tra email để nhập OTP.");
@@ -82,9 +80,9 @@ public class UserService {
       public UserDto verifyOtp(String email, String otp) {
         UserDto resp = new UserDto();
         try {
-            Optional<Users> userOptional = usersRepo.findByEmail(email);
+            Optional<Account> userOptional = usersRepo.findByEmail(email);
             if (userOptional.isPresent()) {
-                Users user = userOptional.get();
+                Account user = userOptional.get();
                 if (user.getOtp() != null && user.getOtp().equals(otp)) {
                     user.setVerified(true);
                     user.setOtp(null); // Clear OTP after verification
@@ -109,9 +107,9 @@ public class UserService {
     public UserDto send_Otp_toEmail(String email) {
         UserDto resp = new UserDto();
         try {
-            Optional<Users> userOptional = usersRepo.findByEmail(email);
+            Optional<Account> userOptional = usersRepo.findByEmail(email);
             if (userOptional.isPresent()) {
-                Users user = userOptional.get();
+                Account user = userOptional.get();
                 
                 String otp = String.format("%06d", new Random().nextInt(999999));
                 
@@ -136,9 +134,9 @@ public class UserService {
     public UserDto verifyOtp_forgotPassword(String email, String otp){
         UserDto resp = new UserDto();
         try {
-            Optional<Users> userOptional = usersRepo.findByEmail(email);
+            Optional<Account> userOptional = usersRepo.findByEmail(email);
             if(userOptional.isPresent()){
-                Users user = userOptional.get();
+                Account user = userOptional.get();
                 if(user.getOtp() != null && user.getOtp().equals(otp)){
                     
                     user.setOtp(null);
@@ -165,9 +163,9 @@ public class UserService {
     public UserDto reset_password(String email, String newPassword){
         UserDto resp = new UserDto();
         try{
-            Optional<Users> userOptional = usersRepo.findByEmail(email);
+            Optional<Account> userOptional = usersRepo.findByEmail(email);
             if(userOptional.isPresent()){
-                Users users = userOptional.get();
+                Account users = userOptional.get();
                 users.setPassword(passwordEncoder.encode(newPassword));
                 usersRepo.save(users);
 
@@ -191,7 +189,7 @@ public class UserService {
         UserDto response = new UserDto();
         try {
 
-            Users users = usersRepo.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+            Account users = usersRepo.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 
             // ✅ Check if user is verified
             if (!users.isVerified()) {
@@ -224,7 +222,7 @@ public class UserService {
         UserDto response = new UserDto();
         try {
             String ourEmail = jwtUntils.extractUsername(refreshTokenRequest.getToken());
-            Users users = usersRepo.findByEmail(ourEmail).orElseThrow();
+            Account users = usersRepo.findByEmail(ourEmail).orElseThrow();
             if (jwtUntils.isTokenValid(refreshTokenRequest.getToken(), users)) {
                 var jwt = jwtUntils.generateToken(users);
                 response.setToken(jwt);
@@ -245,7 +243,7 @@ public class UserService {
     public UserDto getAllUsers() {
         UserDto response = new UserDto();
         try {
-            List<Users> result = usersRepo.findAll();
+            List<Account> result = usersRepo.findAll();
             if (!result.isEmpty()) {
                 response.setOurUsersList(result);
                 response.setStatusCode(200);
@@ -265,7 +263,7 @@ public class UserService {
     public UserDto getUserById(Integer id) {
         UserDto response = new UserDto();
         try {
-            Users userbyId = usersRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+            Account userbyId = usersRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
             response.setOurUsers(userbyId);
             response.setStatusCode(200);
             response.setMessage("Found user with id: " + id + " successfully");
@@ -281,7 +279,7 @@ public class UserService {
     public UserDto deleteUser(Integer userid) {
         UserDto response = new UserDto();
         try {
-            Optional<Users> userOptional = usersRepo.findById(userid);
+            Optional<Account> userOptional = usersRepo.findById(userid);
             if (userOptional.isPresent()) {
                 usersRepo.deleteById(userid);
                 response.setStatusCode(200);
@@ -298,16 +296,16 @@ public class UserService {
         }
     }
 
-    public UserDto updateUser(Integer userid, Users updateUser) {
+    public UserDto updateUser(Integer userid, Account updateUser) {
         UserDto response = new UserDto();
         try {
-            Optional<Users> userOptional = usersRepo.findById(userid);
+            Optional<Account> userOptional = usersRepo.findById(userid);
             if (userOptional.isPresent()) {
-                Users existingUser = userOptional.get();
-                existingUser.setName(updateUser.getName());
-                existingUser.setCity(updateUser.getCity());
+                Account existingUser = userOptional.get();
+                existingUser.setUsername(updateUser.getUsername());
                 existingUser.setEmail(updateUser.getEmail());
                 existingUser.setRole(updateUser.getRole());
+                existingUser.setStatus(updateUser.getStatus());
 
             // Fix: Check if the password is not null and not empty
             if (updateUser.getPassword() != null && !updateUser.getPassword().isEmpty()) {
@@ -315,7 +313,7 @@ public class UserService {
             }
 
 
-                Users saveOurUser = usersRepo.save(existingUser);
+                Account saveOurUser = usersRepo.save(existingUser);
                 response.setOurUsers(saveOurUser);
                 response.setStatusCode(200);
                 response.setMessage("User Update Successful");
@@ -334,7 +332,7 @@ public class UserService {
     public UserDto getMyInfo(String email) {
         UserDto response = new UserDto();
         try {
-            Optional<Users> userOptional = usersRepo.findByEmail(email);
+            Optional<Account> userOptional = usersRepo.findByEmail(email);
             if (userOptional.isPresent()) {
                 response.setOurUsers(userOptional.get());
                 response.setStatusCode(200);

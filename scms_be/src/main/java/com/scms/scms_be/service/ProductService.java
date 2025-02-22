@@ -1,4 +1,4 @@
-package com.scms.scms_be.service.product;
+package com.scms.scms_be.service;
 
 
 import java.io.IOException;

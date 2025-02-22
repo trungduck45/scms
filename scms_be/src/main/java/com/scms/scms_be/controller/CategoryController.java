@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.dto.CategoryDto;
 import com.scms.scms_be.entity.Category;
-import com.scms.scms_be.service.category.CategoryService;
+import com.scms.scms_be.service.CategoryService;
 
 import lombok.RequiredArgsConstructor;
 

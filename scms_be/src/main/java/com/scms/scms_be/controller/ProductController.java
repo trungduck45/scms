@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.dto.ProductDto;
-import com.scms.scms_be.service.product.ProductService;
+import com.scms.scms_be.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,6 +36,7 @@ public class ProductController {
     public ResponseEntity<List<ProductDto>> getAllProduct() {
         return ResponseEntity.ok(productService.getAllProduct());
     }
+    
     @GetMapping("/auth/get-product/{productId}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Integer productId) {
         return ResponseEntity.ok(productService.getProductById(productId));

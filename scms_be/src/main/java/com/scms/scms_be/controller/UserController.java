@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.dto.UserDto;
-import com.scms.scms_be.entity.Users;
+import com.scms.scms_be.entity.Account;
 import com.scms.scms_be.service.user.UserService;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,7 +73,7 @@ public class UserController {
     }
 
     @PutMapping("/admin/update/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Integer userId, @RequestBody Users newUser) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Integer userId, @RequestBody Account newUser) {
         return ResponseEntity.ok(userService.updateUser(userId, newUser));
     }
 
