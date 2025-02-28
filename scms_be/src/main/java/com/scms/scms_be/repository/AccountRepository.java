@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.scms.scms_be.entity.Account;
 
 @Repository
-public interface UsersRepository extends JpaRepository<Account, Integer>{
+public interface AccountRepository extends JpaRepository<Account, Long>{
 
     Optional<Account> findByEmail(String email);
     Optional<Account> findByEmailAndOtp(String email, String otp);

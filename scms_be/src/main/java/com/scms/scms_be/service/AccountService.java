@@ -1,4 +1,4 @@
-package com.scms.scms_be.service.user;
+package com.scms.scms_be.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,14 +14,13 @@ import org.springframework.stereotype.Service;
 import com.scms.scms_be.config.JWTUntils;
 import com.scms.scms_be.dto.UserDto;
 import com.scms.scms_be.entity.Account;
-import com.scms.scms_be.repository.UsersRepository;
-import com.scms.scms_be.service.EmailService;
+import com.scms.scms_be.repository.AccountRepository;
 
 @Service
-public class UserService {
+public class AccountService {
 
     @Autowired
-    private UsersRepository usersRepo;
+    private AccountRepository usersRepo;
 
     @Autowired
     private JWTUntils jwtUntils;
@@ -58,7 +57,7 @@ public class UserService {
                     "Active",
                     false // Not verified yet
             );
-
+            
             Account savedUser = usersRepo.save(newUser);
 
             // Send OTP via Email
@@ -260,7 +259,7 @@ public class UserService {
         }
     }
 
-    public UserDto getUserById(Integer id) {
+    public UserDto getUserById(long id) {
         UserDto response = new UserDto();
         try {
             Account userbyId = usersRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
@@ -276,7 +275,7 @@ public class UserService {
         }
     }
 
-    public UserDto deleteUser(Integer userid) {
+    public UserDto deleteUser(Long userid) {
         UserDto response = new UserDto();
         try {
             Optional<Account> userOptional = usersRepo.findById(userid);
@@ -296,7 +295,7 @@ public class UserService {
         }
     }
 
-    public UserDto updateUser(Integer userid, Account updateUser) {
+    public UserDto updateUser(Long userid, Account updateUser) {
         UserDto response = new UserDto();
         try {
             Optional<Account> userOptional = usersRepo.findById(userid);

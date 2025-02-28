@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.scms.scms_be.dto.UserDto;
 import com.scms.scms_be.entity.Account;
-import com.scms.scms_be.service.user.UserService;
+import com.scms.scms_be.service.AccountService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private AccountService userService;
 
 
     @PostMapping("/auth/register")
@@ -68,17 +68,17 @@ public class UserController {
     }
 
     @GetMapping("/admin/get-user/{userId}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Integer userId) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 
     @PutMapping("/admin/update/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Integer userId, @RequestBody Account newUser) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long userId, @RequestBody Account newUser) {
         return ResponseEntity.ok(userService.updateUser(userId, newUser));
     }
 
     @DeleteMapping("/admin/delete/{userId}")
-    public ResponseEntity<UserDto> deleteUser(@PathVariable Integer userId) {
+    public ResponseEntity<UserDto> deleteUser(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.deleteUser(userId));
     }
 

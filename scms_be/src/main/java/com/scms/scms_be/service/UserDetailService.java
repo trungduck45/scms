@@ -1,4 +1,4 @@
-package com.scms.scms_be.service.user;
+package com.scms.scms_be.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -6,13 +6,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.scms.scms_be.repository.UsersRepository;
+import com.scms.scms_be.repository.AccountRepository;
 
 @Service
 public class UserDetailService implements UserDetailsService {
 
     @Autowired
-    private UsersRepository usersRepo;
+    private AccountRepository usersRepo;
 
     @Override
     

@@ -33,7 +33,7 @@ public class Account implements UserDetails {
     private String status;
     private boolean verified = false;
 
-    public Account(String email, String username, String password, String role, String otp,String status, boolean verified) {
+    public Account(String email ,String username, String password, String role, String otp,String status, boolean verified) {
         this.email = email;
         this.username = username;
         this.password = password;
